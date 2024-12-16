@@ -1,0 +1,187 @@
+---
+title: "Overview for Aruba"
+author: "Haochen Li"
+date: "`r Sys.Date()`"
+format: pptx
+---
+
+# Introduction
+
+- Objectives
+    -   **Economic Analysis**: GDP trends for Aruba
+    -   **Environmental Impact**: CO2 emissions from the transportation sector
+    -   **Mangrove Change Detection**: Analysis using remote sensing TIF files
+
+------------------------------------------------------------------------
+
+# GDP for Aruba
+
+  -   Sharp decrease around 2008: Likely caused by the global financial crisis.
+  -   Significant drop around 2020: Strongly linked to the economic impacts of the COVID-19 pandemic.
+
+```{r gdp_plot, echo=FALSE, message=FALSE, warning=FALSE}
+# Load required libraries
+setwd("E:/Desktop/BU/2024 Fall/MA615/Final")
+library(dplyr)
+library(ggplot2)
+
+# Load and clean the dataset
+data <- read.csv("A&B_list.csv", fileEncoding = "latin1", stringsAsFactors = FALSE)
+colnames(data) <- c("Country", "Series", "Year", "Value")
+data <- data %>%
+  mutate(Country = as.character(Country),
+         Series = as.character(Series),
+         Year = as.numeric(Year),
+         Value = as.numeric(Value))
+
+# Filter for Aruba GDP data
+AB <- data %>% filter(Country %in% c("Aruba", "Barbados"))
+aruba_gdp <- AB %>% filter(Country == "Aruba" & grepl("GDP", Series, ignore.case = TRUE))
+
+# Plot GDP trends
+ggplot(aruba_gdp, aes(x = Year, y = Value)) +
+  geom_line(color = "blue") +
+  geom_point(color = "red") +
+  labs(title = "GDP Trends for Aruba",
+       x = "Year",
+       y = "GDP (in billions)") +
+  theme_minimal()
+```
+
+------------------------------------------------------------------------
+
+# CO2 Emissions for Aruba
+
+  -   Sharp decrease around 2010: CO2 emissions from transport energy sources show a steep decline, possibly due to reduced activity or policies.
+  -   Fluctuations post-2010: CO2 emissions remained inconsistent, showing some recovery and stabilization over time.
+
+```{r co2_plot, echo=FALSE, message=FALSE, warning=FALSE}
+# Filter for CO2 emissions
+aruba_co2 <- AB %>%
+  filter(Country == "Aruba" & grepl("Transport \\(?Energy\\)?", Series, ignore.case = TRUE))
+
+# Plot CO2 emissions
+ggplot(aruba_co2, aes(x = Year, y = Value)) +
+  geom_line(color = "green") +
+  geom_point(color = "orange") +
+  labs(title = "CO2 Emissions from Transport for Aruba",
+       x = "Year",
+       y = "CO2 Emissions (Mt CO2e)") +
+  theme_minimal()
+
+```
+
+------------------------------------------------------------------------
+
+# Mangrove Change Detection
+
+Analyzed mangrove vegetation changes using remote sensing data.
+
+**Interactive Map**
+
+  - Significant decrease in mangrove vegetation observed.
+        - **Major decrease** detected in **May**.
+        - Red pixels indicate areas with vegetation loss.
+        - Comparison analysis highlights critical regions for conservation efforts.
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/202305_06.png){width="70%"}
+
+
+# Mangrove Trend Analysis
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Time Trend Comparison**
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/time_trend.png){width="100%"}
+:::
+
+::: {.column width="50%"}
+**Seasonal Comparison**
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/seasonal.png){width="100%"}
+:::
+
+::::
+
+------------------------------------------------------------------------
+
+# Comparison: Aruba vs Barbados
+
+:::: {.columns}
+
+::: {.column width="50%"}
+<!-- Left Column (Empty or Placeholder Text) -->
+**Overview**  
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/barbados.png){width="100%"}
+
+:::
+
+::: {.column width="50%"}
+<!-- Right Column: Table -->
+**Table: Comparative Metrics**
+
+| Metric                  | Aruba            | Barbados          |
+|-------------------------|------------------|-------------------|
+| **Population (2023)**   | 107,000          | 281,000           |
+| **GDP (2023)**          | $3.5 Billion     | $5.3 Billion      |
+| **GDP per Capita**      | $32,710          | $18,860           |
+| **CO2 Emissions**       | 0.3 Mt CO2e      | 1.2 Mt CO2e       |
+| **Tourism Contribution**| 80% of GDP       | 40% of GDP        |
+:::
+
+::::
+
+# Comparison: Aruba vs Barbados
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**GDP Comparison**
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/GDP.png){width="100%"}
+:::
+
+::: {.column width="50%"}
+**CO2 Emissions Comparison**
+
+![](E:/Desktop/BU/2024%20Fall/MA615/Final/pics/emmsion.png){width="100%"}
+:::
+
+::::
+
+
+
+---
+
+# SWOT Analysis
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**Strengths (S)**  
+- Tourism: A significant economic driver.  
+- Pre-pandemic GDP growth showed strong reliance on tourism.  
+
+**Weaknesses (W)**  
+- Over-reliance on tourism.  
+- Sharp GDP decline during the COVID-19 pandemic.  
+:::
+
+::: {.column width="50%"}
+**Opportunities (O)**  
+- Biodiversity conservation initiatives.  
+- Mangrove restoration programs to enhance ecological benefits.  
+
+**Threats (T)**  
+- Mangrove forest degradation.  
+- Climate change and rising sea levels pose risks to tourism and ecosystems.  
+:::
+
+::::
+
+------------------------------------------------------------------------
+
+# Thank You!    
